@@ -52,6 +52,10 @@ public class CalculateSales {
 			}
 		}
 
+		for(int i = 0; i < rcdFiles.size(); i++) {
+
+		}
+
 
 		// 支店別集計ファイル書き込み処理
 		if(!writeFile(args[0], FILE_NAME_BRANCH_OUT, branchNames, branchSales)) {
