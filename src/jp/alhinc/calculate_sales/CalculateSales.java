@@ -52,9 +52,25 @@ public class CalculateSales {
 			}
 		}
 
-		for(int i = 0; i < rcdFiles.size(); i++) {
-
-		}
+//		for(int i = 0; i < rcdFiles.size(); i++) {
+//			// 売上ファイルの中身の読み込み
+//			File file = rcdFiles.get(i);
+//
+//			try {
+//				FileReader fr = new FileReader(file);
+//				BufferReader
+//			}
+//
+//
+//			// 型の変換
+//			long fileSale = Long.parseLong
+//
+//			// 読み込んだ売上金額を加算
+//			Long saleAmount =
+//
+//			// Mapに値を追加
+//
+//		}
 
 
 		// 支店別集計ファイル書き込み処理
