@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CalculateSales {
@@ -37,7 +39,18 @@ public class CalculateSales {
 		}
 
 		// ※ここから集計処理を作成してください。(処理内容2-1、2-2)
+		File[] files = new File("C:\\Users\\trainee1360\\Desktop\\売り上げ集計課題").listFiles();
 
+		List<File> rcdFiles = new ArrayList<>();
+
+		for(int i = 0; i < files.length; i++) {
+			//ファイルの取得
+			File file = files[i];
+			//ファイル名が「数字8桁.rcd」であるか判定して抽出
+			if (file.getName().matches("^[0-9]{8}\\.rcd$")){
+				rcdFiles.add(files[i]);
+			}
+		}
 
 
 		// 支店別集計ファイル書き込み処理
