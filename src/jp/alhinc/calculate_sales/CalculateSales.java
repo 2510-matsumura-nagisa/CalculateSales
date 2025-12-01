@@ -1,8 +1,10 @@
 package jp.alhinc.calculate_sales;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,15 +42,15 @@ public class CalculateSales {
 
 		// 処理内容2-1
 		File[] files = new File(args[0]).listFiles();
-
+		// ファイルを保持するArrayListの定義
 		List<File> rcdFiles = new ArrayList<>();
 
 		for(int i = 0; i < files.length; i++) {
-			//ファイルの取得
+			//対象ファイルの取得
 			File file = files[i];
-			//ファイル名が「数字8桁.rcd」であるか判定して抽出
+			//ファイル名が「数字8桁.rcd」であるか判定し、ArrayListに追加
 			if (file.getName().matches("^[0-9]{8}\\.rcd$")){
-				rcdFiles.add(files[i]);
+				rcdFiles.add(file);
 			}
 		}
 
@@ -58,7 +60,6 @@ public class CalculateSales {
 			// BufferedReaderの初期化
 			BufferedReader br = null;
 
-			// 売上ファイルの中身の読み込み
 			try {
 				File file = rcdFiles.get(i);
 				FileReader fr = new FileReader(file);
@@ -69,14 +70,14 @@ public class CalculateSales {
 				// 売上ファイルの中身を保持するArrayListの定義
 				List<String> salesRecord = new ArrayList<String>();
 
-				// ファイルの内容をArrayListに追加 ([0]に支店コード、[1]に売上金額)
+				// ファイルの中身の読込、ArrayListに追加 ([0]に支店コード、[1]に売上金額)
 				while((line = br.readLine()) != null) {
 					salesRecord.add(line);
 				}
 
-				// 型の変換(String→long)
+				// 売上金額の型の変換(String→long)
 				long fileSale = Long.parseLong(salesRecord.get(1));
-				// 支店コードの定数を定義
+				// 支店コードの変数を宣言
 				String branchCode = salesRecord.get(0);
 				// 読み込んだ売上金額を対象の支店の売上金額合計に加算
 				Long saleAmount = branchSales.get(branchCode) + fileSale;
@@ -128,11 +129,12 @@ public class CalculateSales {
 			// 一行ずつ読み込む
 			while((line = br.readLine()) != null) {
 				// 処理内容1-2
+				//「,」で文字列を分割
 				String[] items =line.split(",");
 
-				//「,」より前(items[0])を代入
+				//「,」より前(items[0])の変数を宣言
 				String branchCode = items[0];
-				//「,」より後(items[1])を代入
+				//「,」より後(items[1])の変数を宣言
 				String branchName = items[1];
 
 				// Mapに値を追加
@@ -143,6 +145,7 @@ public class CalculateSales {
 		} catch(IOException e) {
 			System.out.println(UNKNOWN_ERROR);
 			return false;
+
 		} finally {
 			// ファイルを開いている場合
 			if(br != null) {
@@ -168,7 +171,41 @@ public class CalculateSales {
 	 * @return 書き込み可否
 	 */
 	private static boolean writeFile(String path, String fileName, Map<String, String> branchNames, Map<String, Long> branchSales) {
-		// ※ここに書き込み処理を作成してください。(処理内容3-1)
+		// 処理内容3-1
+		//BufferedWriterの初期化
+		BufferedWriter bw = null;
+
+		try {
+			File file = new File(path, fileName);
+			FileWriter fw = new FileWriter(file);
+			bw = new BufferedWriter(fw);
+
+			// 2つのマップから全てのKeyを取得
+			for(String key : branchNames.keySet()) {
+				// 支店コード、支店名、売上金額の変数を宣言
+				String branchCode = key;
+				String branchName = branchNames.get(key);
+				Long saleAmount = branchSales.get(key);
+				//値を書き出す
+				bw.write(branchCode + "," + branchName + "," + saleAmount);
+				// 改行
+				bw.newLine();
+			}
+
+
+		} catch(IOException e) {
+			System.out.println(UNKNOWN_ERROR);
+			return false;
+		} finally {
+			if(bw != null) {
+				try {
+					bw.close();
+				} catch(IOException e) {
+					System.out.println(UNKNOWN_ERROR);
+					return false;
+				}
+			}
+		}
 
 		return true;
 	}
