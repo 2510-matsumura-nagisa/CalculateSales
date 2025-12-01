@@ -38,8 +38,8 @@ public class CalculateSales {
 			return;
 		}
 
-		// ※ここから集計処理を作成してください。(処理内容2-1、2-2)
-		File[] files = new File("C:\\Users\\trainee1360\\Desktop\\売り上げ集計課題").listFiles();
+		// 処理内容2-1
+		File[] files = new File(args[0]).listFiles();
 
 		List<File> rcdFiles = new ArrayList<>();
 
@@ -52,25 +52,52 @@ public class CalculateSales {
 			}
 		}
 
-//		for(int i = 0; i < rcdFiles.size(); i++) {
-//			// 売上ファイルの中身の読み込み
-//			File file = rcdFiles.get(i);
-//
-//			try {
-//				FileReader fr = new FileReader(file);
-//				BufferReader
-//			}
-//
-//
-//			// 型の変換
-//			long fileSale = Long.parseLong
-//
-//			// 読み込んだ売上金額を加算
-//			Long saleAmount =
-//
-//			// Mapに値を追加
-//
-//		}
+		// 処理内容2-2
+		for(int i = 0; i < rcdFiles.size(); i++) {
+
+			// BufferedReaderの初期化
+			BufferedReader br = null;
+
+			// 売上ファイルの中身の読み込み
+			try {
+				File file = rcdFiles.get(i);
+				FileReader fr = new FileReader(file);
+				br = new BufferedReader(fr);
+
+				String line;
+
+				// 売上ファイルの中身を保持するArrayListの定義
+				List<String> salesRecord = new ArrayList<String>();
+
+				// ファイルの内容をArrayListに追加 ([0]に支店コード、[1]に売上金額)
+				while((line = br.readLine()) != null) {
+					salesRecord.add(line);
+				}
+
+				// 型の変換(String→long)
+				long fileSale = Long.parseLong(salesRecord.get(1));
+				// 支店コードの定数を定義
+				String branchCode = salesRecord.get(0);
+				// 読み込んだ売上金額を対象の支店の売上金額合計に加算
+				Long saleAmount = branchSales.get(branchCode) + fileSale;
+				// Mapに値を追加
+				branchSales.put(branchCode, saleAmount);
+
+			} catch(IOException e) {
+				System.out.println(UNKNOWN_ERROR);
+				return;
+
+			} finally {
+				if(br != null) {
+					try {
+						br.close();
+					} catch(IOException e) {
+						System.out.println(UNKNOWN_ERROR);
+						return;
+					}
+				}
+			}
+		}
 
 
 		// 支店別集計ファイル書き込み処理
