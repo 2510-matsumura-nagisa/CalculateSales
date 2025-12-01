@@ -46,11 +46,9 @@ public class CalculateSales {
 		List<File> rcdFiles = new ArrayList<>();
 
 		for(int i = 0; i < files.length; i++) {
-			//対象ファイルの取得
-			File file = files[i];
 			//ファイル名が「数字8桁.rcd」であるか判定し、ArrayListに追加
-			if (file.getName().matches("^[0-9]{8}\\.rcd$")){
-				rcdFiles.add(file);
+			if (files[i].getName().matches("^[0-9]{8}\\.rcd$")){
+				rcdFiles.add(files[i]);
 			}
 		}
 
@@ -130,7 +128,7 @@ public class CalculateSales {
 			while((line = br.readLine()) != null) {
 				// 処理内容1-2
 				//「,」で文字列を分割
-				String[] items =line.split(",");
+				String[] items = line.split(",");
 
 				//「,」より前(items[0])の変数を宣言
 				String branchCode = items[0];
