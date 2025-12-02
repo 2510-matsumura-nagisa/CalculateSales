@@ -36,8 +36,8 @@ public class CalculateSales {
 	 */
 	public static void main(String[] args) {
 
-		//エラー処理3-1
-		//コマンドライン引数が渡されていない場合、処理終了
+		// エラー処理3-1
+		// コマンドライン引数が渡されていない場合、処理終了
 		if(args.length != 1) {
 			System.out.println(UNKNOWN_ERROR);
 			return;
@@ -181,7 +181,7 @@ public class CalculateSales {
 
 			// エラー処理1-1
 			// 支店名義ファイルが存在しない場合、処理終了
-			if (!file.exists()) {
+			if (!file.exists() || !file.isFile()) {
 				System.out.println(FILE_NOT_EXIST);
 				return false;
 			}
