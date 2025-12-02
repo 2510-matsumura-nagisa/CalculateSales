@@ -121,7 +121,6 @@ public class CalculateSales {
 		try {
 			File file = new File(path, fileName);
 
-
 			// エラー処理1
 			// 支店名義ファイルが存在しない場合、処理終了
 			if (!file.exists()) {
@@ -138,6 +137,13 @@ public class CalculateSales {
 				// 処理内容1-2
 				//「,」で文字列を分割
 				String[] items = line.split(",");
+
+				// エラー処理1-2
+				// フォーマットが不正な場合、処理終了
+				if((items.length != 2) || (!items[0].matches("^[0-9]{3}$"))) {
+					System.out.println(FILE_INVALID_FORMAT);
+					return false;
+				}
 
 				//「,」より前(items[0])の変数を宣言
 				String branchCode = items[0];
