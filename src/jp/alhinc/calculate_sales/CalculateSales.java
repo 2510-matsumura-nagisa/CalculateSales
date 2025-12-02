@@ -26,7 +26,8 @@ public class CalculateSales {
 	private static final String FILE_INVALID_FORMAT = "支店定義ファイルのフォーマットが不正です";
 	private static final String FILE_NOT_SEQUENTIAL_NUMBER = "売上ファイル名が連番になっていません";
 	private static final String AMOUNT_OVER_10_DIGET = "合計金額が10桁を超えました";
-	private static final String FILE_INVALID_BRANCH_CODE = "の支店コードが不正です";
+	private static final String SALES_FILE_INVALID_BRANCH_CODE = "の支店コードが不正です";
+	private static final String SALES_FILE_INVALID_FORMAT = "のフォーマットが不正です";
 
 	/**
 	 * メインメソッド
@@ -93,10 +94,17 @@ public class CalculateSales {
 					salesRecord.add(line);
 				}
 
+				// エラー処理2-4
+				//売上ファイルの中身が2行ではない場合、処理終了
+				if(salesRecord.size() != 2) {
+					System.out.println(file.getName() + SALES_FILE_INVALID_FORMAT);
+					return;
+				}
+
 				// エラー処理2-3
 				// 売上ファイルの支店コードが支店定義ファイルに該当しない場合、処理終了
 				if(!branchNames.containsKey(salesRecord.get(0))) {
-					System.out.println(file.getName() + FILE_INVALID_BRANCH_CODE);
+					System.out.println(file.getName() + SALES_FILE_INVALID_BRANCH_CODE);
 					return;
 				}
 
