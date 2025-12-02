@@ -24,7 +24,8 @@ public class CalculateSales {
 	private static final String UNKNOWN_ERROR = "予期せぬエラーが発生しました";
 	private static final String FILE_NOT_EXIST = "支店定義ファイルが存在しません";
 	private static final String FILE_INVALID_FORMAT = "支店定義ファイルのフォーマットが不正です";
-	private static final String FILE_NOT_SEQUENTIAL_NUMBER= "売上ファイル名が連番になっていません";
+	private static final String FILE_NOT_SEQUENTIAL_NUMBER = "売上ファイル名が連番になっていません";
+	private static final String AMOUNT_OVER_10_DIGET = "合計金額が10桁を超えました";
 
 	/**
 	 * メインメソッド
@@ -57,11 +58,13 @@ public class CalculateSales {
 		// エラー処理2-1
 		// 昇順にソート
 		Collections.sort(rcdFiles);
+
 		// 前後のファイルを比較（繰り返し回数はファイルのリスト数-1）
 		for(int i = 0; i < rcdFiles.size() -1; i++) {
 			int former = Integer.parseInt(rcdFiles.get(i).getName().substring(0,8));
 			int latter = Integer.parseInt(rcdFiles.get(i + 1).getName().substring(0,8));
-		// 前後のファイルが連番担っていない場合、処理終了
+
+		// 前後のファイルが連番になっていない場合、処理終了
 			if((latter - former) != 1) {
 				System.out.println(FILE_NOT_SEQUENTIAL_NUMBER);
 				return;
@@ -95,6 +98,14 @@ public class CalculateSales {
 				String branchCode = salesRecord.get(0);
 				// 読み込んだ売上金額を対象の支店の売上金額合計に加算
 				Long saleAmount = branchSales.get(branchCode) + fileSale;
+
+				// エラー処理2-2
+				// 売上金額合計が10桁を超える（11桁以上）の場合、処理終了
+				if(saleAmount >= 10000000000L) {
+					System.out.println(AMOUNT_OVER_10_DIGET);
+					return;
+				}
+
 				// Mapに値を追加
 				branchSales.put(branchCode, saleAmount);
 
