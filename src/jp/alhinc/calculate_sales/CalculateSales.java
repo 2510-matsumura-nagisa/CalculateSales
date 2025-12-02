@@ -35,6 +35,14 @@ public class CalculateSales {
 	 * @param コマンドライン引数
 	 */
 	public static void main(String[] args) {
+
+		//エラー処理3-1
+		//コマンドライン引数が渡されていない場合、処理終了
+		if(args.length != 1) {
+			System.out.println(UNKNOWN_ERROR);
+			return;
+		}
+
 		// 支店コードと支店名を保持するMap
 		Map<String, String> branchNames = new HashMap<>();
 		// 支店コードと売上金額を保持するMap
@@ -62,7 +70,7 @@ public class CalculateSales {
 		Collections.sort(rcdFiles);
 
 		// 前後のファイルを比較（繰り返し回数はファイルのリスト数-1）
-		for(int i = 0; i < rcdFiles.size() -1; i++) {
+		for(int i = 0; i < rcdFiles.size() - 1; i++) {
 			int former = Integer.parseInt(rcdFiles.get(i).getName().substring(0,8));
 			int latter = Integer.parseInt(rcdFiles.get(i + 1).getName().substring(0,8));
 
