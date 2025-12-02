@@ -47,7 +47,7 @@ public class CalculateSales {
 
 		for(int i = 0; i < files.length; i++) {
 			//ファイル名が「数字8桁.rcd」であるか判定し、ArrayListに追加
-			if (files[i].getName().matches("^[0-9]{8}\\.rcd$")){
+			if (files[i].getName().matches("^[0-9]{8}\\.rcd$")) {
 				rcdFiles.add(files[i]);
 			}
 		}
@@ -120,6 +120,15 @@ public class CalculateSales {
 
 		try {
 			File file = new File(path, fileName);
+
+
+			// エラー処理1
+			// 支店名義ファイルが存在しない場合、処理終了
+			if (!file.exists()) {
+				System.out.println(FILE_NOT_EXIST);
+				return false;
+			}
+
 			FileReader fr = new FileReader(file);
 			br = new BufferedReader(fr);
 
