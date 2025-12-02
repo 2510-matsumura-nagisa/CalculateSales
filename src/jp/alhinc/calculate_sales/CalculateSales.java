@@ -59,8 +59,8 @@ public class CalculateSales {
 		List<File> rcdFiles = new ArrayList<>();
 
 		for(int i = 0; i < files.length; i++) {
-			//ファイル名が「数字8桁.rcd」であるか判定し、ArrayListに追加
-			if (files[i].getName().matches("^[0-9]{8}\\.rcd$")) {
+			// ファイルであるか、ファイル名が「数字8桁.rcd」であるか判定し、ArrayListに追加
+			if (files[i].isFile() && files[i].getName().matches("^[0-9]{8}\\.rcd$")) {
 				rcdFiles.add(files[i]);
 			}
 		}
@@ -117,7 +117,7 @@ public class CalculateSales {
 				}
 
 				// エラー処理3-2
-				//売上ファイルの売上金額が数字で無い場合、処理終了
+				// 売上ファイルの売上金額が数字で無い場合、処理終了
 				if(!salesRecord.get(1).matches("^[0-9]+$")) {
 					System.out.println(UNKNOWN_ERROR);
 					return;
