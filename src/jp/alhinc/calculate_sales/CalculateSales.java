@@ -103,7 +103,7 @@ public class CalculateSales {
 				}
 
 				// エラー処理2-4
-				//売上ファイルの中身が2行ではない場合、処理終了
+				// 売上ファイルの中身が2行ではない場合、処理終了
 				if(salesRecord.size() != 2) {
 					System.out.println(file.getName() + SALES_FILE_INVALID_FORMAT);
 					return;
@@ -113,6 +113,13 @@ public class CalculateSales {
 				// 売上ファイルの支店コードが支店定義ファイルに該当しない場合、処理終了
 				if(!branchNames.containsKey(salesRecord.get(0))) {
 					System.out.println(file.getName() + SALES_FILE_INVALID_BRANCH_CODE);
+					return;
+				}
+
+				// エラー処理3-2
+				//売上ファイルの売上金額が数字で無い場合、処理終了
+				if(!salesRecord.get(1).matches("^[0-9]+$")) {
+					System.out.println(UNKNOWN_ERROR);
 					return;
 				}
 
