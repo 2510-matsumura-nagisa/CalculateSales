@@ -235,10 +235,14 @@ public class CalculateSales {
 					System.out.println(errorName + FILE_INVALID_FORMAT);
 					return false;
 				}
+				//「,」より前(items[0])の変数を宣言
+				String itemCode = items[0];
+				//「,」より後(items[1])の変数を宣言
+				String itemName = items[1];
 
 				// Mapに値を追加
-				namesMap.put(items[0], items[1]);
-				salesMap.put(items[0], 0L);
+				namesMap.put(itemCode, itemName);
+				salesMap.put(itemCode, 0L);
 			}
 
 		} catch(IOException e) {
