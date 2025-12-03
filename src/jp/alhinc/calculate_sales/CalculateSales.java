@@ -32,7 +32,7 @@ public class CalculateSales {
 	private static final String FILE_INVALID_FORMAT = "定義ファイルのフォーマットが不正です";
 	private static final String FILE_NOT_SEQUENTIAL_NUMBER = "売上ファイル名が連番になっていません";
 	private static final String AMOUNT_OVER_10_DIGET = "合計金額が10桁を超えました";
-	private static final String SALES_FILE_INVALID_BRANCH_CODE = "の支店コードが不正です";
+	private static final String SALES_FILE_INVALID_CODE = "コードが不正です";
 	private static final String SALES_FILE_INVALID_FORMAT = "のフォーマットが不正です";
 
 	/**
@@ -126,7 +126,7 @@ public class CalculateSales {
 					salesRecord.add(line);
 				}
 
-				// エラー処理2-4
+				// エラー処理2-5
 				// 売上ファイルの中身が3行ではない場合、処理終了
 				if(salesRecord.size() != 3) {
 					System.out.println(file.getName() + SALES_FILE_INVALID_FORMAT);
@@ -136,7 +136,14 @@ public class CalculateSales {
 				// エラー処理2-3
 				// 売上ファイルの支店コードが支店定義ファイルに該当しない場合、処理終了
 				if(!branchNames.containsKey(salesRecord.get(0))) {
-					System.out.println(file.getName() + SALES_FILE_INVALID_BRANCH_CODE);
+					System.out.println(file.getName() + "の" + errorBranchName + SALES_FILE_INVALID_CODE);
+					return;
+				}
+
+				// エラー処理2-4
+				// 売上ファイルの商品コードが商品定義ファイルに該当しない場合、処理終了
+				if(!commodityNames.containsKey(salesRecord.get(1))) {
+					System.out.println(file.getName() + "の" + errorCommodityName + SALES_FILE_INVALID_CODE);
 					return;
 				}
 
