@@ -121,14 +121,14 @@ public class CalculateSales {
 				// 売上ファイルの中身を保持するArrayListの定義
 				List<String> salesRecord = new ArrayList<String>();
 
-				// ファイルの中身の読込、ArrayListに追加 ([0]に支店コード、[1]に売上金額)
+				// ファイルの中身の読込、ArrayListに追加 ([0]に支店コード、[1]に商品コード、[2]に売上金額)
 				while((line = br.readLine()) != null) {
 					salesRecord.add(line);
 				}
 
 				// エラー処理2-4
-				// 売上ファイルの中身が2行ではない場合、処理終了
-				if(salesRecord.size() != 2) {
+				// 売上ファイルの中身が3行ではない場合、処理終了
+				if(salesRecord.size() != 3) {
 					System.out.println(file.getName() + SALES_FILE_INVALID_FORMAT);
 					return;
 				}
@@ -142,27 +142,34 @@ public class CalculateSales {
 
 				// エラー処理3-2
 				// 売上ファイルの売上金額が数字で無い場合、処理終了
-				if(!salesRecord.get(1).matches("^[0-9]+$")) {
+				if(!salesRecord.get(2).matches("^[0-9]+$")) {
 					System.out.println(UNKNOWN_ERROR);
 					return;
 				}
 
 				// 売上金額の型の変換(String→long)
-				long fileSale = Long.parseLong(salesRecord.get(1));
+				long fileSale = Long.parseLong(salesRecord.get(2));
+
 				// 支店コードの変数を宣言
 				String branchCode = salesRecord.get(0);
+				// 商品コードの変数を宣言
+				String commodityCode = salesRecord.get(1);
+
 				// 読み込んだ売上金額を対象の支店の売上金額合計に加算
-				Long saleAmount = branchSales.get(branchCode) + fileSale;
+				Long branchSaleAmount = branchSales.get(branchCode) + fileSale;
+				// 読み込んだ売上金額を対象の商品の売上金額合計に加算
+				Long commoditySaleAmount = commoditySales.get(commodityCode) + fileSale;
 
 				// エラー処理2-2
-				// 売上金額合計が10桁を超える（11桁以上）の場合、処理終了
-				if(saleAmount >= 10000000000L) {
+				// 各支店または各商品の売上金額合計が10桁を超える（11桁以上）の場合、処理終了
+				if(branchSaleAmount >= 10000000000L || commoditySaleAmount >= 10000000000L) {
 					System.out.println(AMOUNT_OVER_10_DIGET);
 					return;
 				}
 
 				// Mapに値を追加
-				branchSales.put(branchCode, saleAmount);
+				branchSales.put(branchCode, branchSaleAmount);
+				commoditySales.put(commodityCode, commoditySaleAmount);
 
 			} catch(IOException e) {
 				System.out.println(UNKNOWN_ERROR);
@@ -187,7 +194,7 @@ public class CalculateSales {
 		}
 
 		// 商品別集計ファイル書き込み処理
-		if(!writeFile(args[0], FILE_NAME_BRANCH_OUT, commodityNames, commoditySales)) {
+		if(!writeFile(args[0], FILE_NAME_COMMODITY_OUT, commodityNames, commoditySales)) {
 			return;
 		}
 
