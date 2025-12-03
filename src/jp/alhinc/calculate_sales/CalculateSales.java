@@ -56,7 +56,7 @@ public class CalculateSales {
 
 		// 商品コードと商品名を保持するMap
 		Map<String, String> commodityNames = new HashMap<>();
-		// 支店コードとコードと商品名を保持するMap
+		// 商品コードと売上金額を保持するMap
 		Map<String, Long> commoditySales = new HashMap<>();
 
 		//支店コードの正規表現、（エラーメッセージでの）表示名を定義
@@ -276,12 +276,12 @@ public class CalculateSales {
 	 *
 	 * @param フォルダパス
 	 * @param ファイル名
-	 * @param 支店コードと支店名を保持するMap
-	 * @param 支店コードと売上金額を保持するMap
+	 * @param コードと支店名を保持するMap
+	 * @param コードと売上金額を保持するMap
 	 * @return 書き込み可否
 	 */
-	private static boolean writeFile(String path, String fileName, Map<String, String> branchNames, Map<String, Long> branchSales) {
-		// 処理内容3-1
+	private static boolean writeFile(String path, String fileName, Map<String, String> namesMap, Map<String, Long> salesMap) {
+		// 処理内容3-1, 3-2
 		// BufferedWriterの初期化
 		BufferedWriter bw = null;
 
@@ -291,13 +291,13 @@ public class CalculateSales {
 			bw = new BufferedWriter(fw);
 
 			// 2つのマップから全てのKeyを取得
-			for(String key : branchNames.keySet()) {
-				// 支店コード、支店名、売上金額の変数を宣言
-				String branchCode = key;
-				String branchName = branchNames.get(key);
-				Long saleAmount = branchSales.get(key);
+			for(String key : namesMap.keySet()) {
+				// コード、名前、売上金額の変数を宣言
+				String itemCode = key;
+				String itemName = namesMap.get(key);
+				Long saleAmount = salesMap.get(key);
 				// 値を書き出す
-				bw.write(branchCode + "," + branchName + "," + saleAmount);
+				bw.write(itemCode + "," + itemName + "," + saleAmount);
 				// 改行
 				bw.newLine();
 			}
