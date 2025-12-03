@@ -217,7 +217,7 @@ public class CalculateSales {
 		try {
 			File file = new File(path, fileName);
 
-			// エラー処理1-1
+			// エラー処理1-1, 1-3
 			// 定義ファイルが存在しない場合、処理終了
 			if (!file.exists() || !file.isFile()) {
 				System.out.println(errorName + FILE_NOT_EXIST);
@@ -236,7 +236,7 @@ public class CalculateSales {
 				//「,」で文字列を分割
 				String[] items = line.split(",");
 
-				// エラー処理1-2
+				// エラー処理1-2, 1-4
 				// フォーマットが不正な場合、処理終了
 				if((items.length != 2) || (!items[0].matches(codeRegex))) {
 					System.out.println(errorName + FILE_INVALID_FORMAT);
