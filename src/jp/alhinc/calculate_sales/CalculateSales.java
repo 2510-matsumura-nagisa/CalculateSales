@@ -28,8 +28,8 @@ public class CalculateSales {
 
 	// エラーメッセージ
 	private static final String UNKNOWN_ERROR = "予期せぬエラーが発生しました";
-	private static final String FILE_NOT_EXIST = "支店定義ファイルが存在しません";
-	private static final String FILE_INVALID_FORMAT = "支店定義ファイルのフォーマットが不正です";
+	private static final String FILE_NOT_EXIST = "定義ファイルが存在しません";
+	private static final String FILE_INVALID_FORMAT = "定義ファイルのフォーマットが不正です";
 	private static final String FILE_NOT_SEQUENTIAL_NUMBER = "売上ファイル名が連番になっていません";
 	private static final String AMOUNT_OVER_10_DIGET = "合計金額が10桁を超えました";
 	private static final String SALES_FILE_INVALID_BRANCH_CODE = "の支店コードが不正です";
@@ -59,13 +59,21 @@ public class CalculateSales {
 		// 支店コードとコードと商品名を保持するMap
 		Map<String, Long> commoditySales = new HashMap<>();
 
+		//支店コードの正規表現、（エラーメッセージでの）表示名を定義
+		String branchCodeRegex = "^[0-9]{3}$";
+		String errorBranchName = "支店";
+
+		//商品コードの正規表現、（エラーメッセージでの）表示名を定義
+		String commodityCodeRegex = "^[0-9a-zA-Z]{8}$";
+		String errorCommodityName = "商品";
+
 		// 支店定義ファイル読み込み処理
-		if(!readFile(args[0], FILE_NAME_BRANCH_LST, branchNames, branchSales)) {
+		if(!readFile(args[0], FILE_NAME_BRANCH_LST, branchNames, branchSales, branchCodeRegex, errorBranchName)) {
 			return;
 		}
 
-		// 商品定義ファイル読込処理
-		if(!readFile(args[0], FILE_NAME_COMMODITY_LST, commodityNames, commoditySales)) {
+		// 商品定義ファイル読み込み処理
+		if(!readFile(args[0], FILE_NAME_COMMODITY_LST, commodityNames, commoditySales, commodityCodeRegex, errorCommodityName)) {
 			return;
 		}
 
@@ -186,52 +194,51 @@ public class CalculateSales {
 	}
 
 	/**
-	 * 支店定義ファイル読み込み処理
+	 * 支店定義ファイル・商品定義ファイル読み込み処理
 	 *
 	 * @param フォルダパス
 	 * @param ファイル名
-	 * @param 支店コードと支店名を保持するMap
-	 * @param 支店コードと売上金額を保持するMap
+	 * @param コードと名前を保持するMap
+	 * @param コードと売上金額を保持するMap
+	 * @param コードの正規表現
+	 * @param エラーメッセージでの表示名
 	 * @return 読み込み可否
 	 */
-	private static boolean readFile(String path, String fileName, Map<String, String> branchNames, Map<String, Long> branchSales) {
+	private static boolean readFile(String path, String fileName, Map<String, String> namesMap, Map<String, Long> salesMap, String codeRegex, String errorName) {
 		BufferedReader br = null;
 
 		try {
 			File file = new File(path, fileName);
 
 			// エラー処理1-1
-			// 支店名義ファイルが存在しない場合、処理終了
+			// 定義ファイルが存在しない場合、処理終了
 			if (!file.exists() || !file.isFile()) {
-				System.out.println(FILE_NOT_EXIST);
+				System.out.println(errorName + FILE_NOT_EXIST);
 				return false;
 			}
 
+			// 処理内容1-1, 1-3
+			// 定義ファイルを開く
 			FileReader fr = new FileReader(file);
 			br = new BufferedReader(fr);
 
 			String line;
 			// 一行ずつ読み込む
 			while((line = br.readLine()) != null) {
-				// 処理内容1-2
+				// 処理内容1-2, 1-4
 				//「,」で文字列を分割
 				String[] items = line.split(",");
 
 				// エラー処理1-2
 				// フォーマットが不正な場合、処理終了
-				if((items.length != 2) || (!items[0].matches("^[0-9]{3}$"))) {
-					System.out.println(FILE_INVALID_FORMAT);
+				if((items.length != 2) || (!items[0].matches(codeRegex))) {
+					System.out.println(errorName + FILE_INVALID_FORMAT);
 					return false;
 				}
 
-				//「,」より前(items[0])の変数を宣言
-				String branchCode = items[0];
-				//「,」より後(items[1])の変数を宣言
-				String branchName = items[1];
-
 				// Mapに値を追加
-				branchNames.put(branchCode, branchName);
-				branchSales.put(branchCode, 0L);
+				namesMap.put(items[0], items[1]);
+				salesMap.put(items[0], 0L);
 			}
 
 		} catch(IOException e) {
