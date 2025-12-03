@@ -59,11 +59,11 @@ public class CalculateSales {
 		// 商品コードと売上金額を保持するMap
 		Map<String, Long> commoditySales = new HashMap<>();
 
-		//支店コードの正規表現、（エラーメッセージでの）表示名を定義
+		// 支店コードの正規表現、（エラーメッセージでの）表示名を定義
 		String branchCodeRegex = "^[0-9]{3}$";
 		String errorBranchName = "支店";
 
-		//商品コードの正規表現、（エラーメッセージでの）表示名を定義
+		// 商品コードの正規表現、（エラーメッセージでの）表示名を定義
 		String commodityCodeRegex = "^[0-9a-zA-Z]{8}$";
 		String errorCommodityName = "商品";
 
@@ -249,6 +249,7 @@ public class CalculateSales {
 					System.out.println(errorName + FILE_INVALID_FORMAT);
 					return false;
 				}
+
 				//「,」より前(items[0])の変数を宣言
 				String itemCode = items[0];
 				//「,」より後(items[1])の変数を宣言
