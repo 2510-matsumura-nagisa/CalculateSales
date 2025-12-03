@@ -263,7 +263,6 @@ public class CalculateSales {
 				bw.newLine();
 			}
 
-
 		} catch(IOException e) {
 			System.out.println(UNKNOWN_ERROR);
 			return false;
