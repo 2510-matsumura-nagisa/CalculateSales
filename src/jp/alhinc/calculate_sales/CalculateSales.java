@@ -71,8 +71,8 @@ public class CalculateSales {
 
 		// 前後のファイルを比較（繰り返し回数はファイルのリスト数-1）
 		for(int i = 0; i < rcdFiles.size() - 1; i++) {
-			int former = Integer.parseInt(rcdFiles.get(i).getName().substring(0,8));
-			int latter = Integer.parseInt(rcdFiles.get(i + 1).getName().substring(0,8));
+			int former = Integer.parseInt(rcdFiles.get(i).getName().substring(0, 8));
+			int latter = Integer.parseInt(rcdFiles.get(i + 1).getName().substring(0, 8));
 
 		// 前後のファイルが連番になっていない場合、処理終了
 			if((latter - former) != 1) {
@@ -243,7 +243,7 @@ public class CalculateSales {
 	 */
 	private static boolean writeFile(String path, String fileName, Map<String, String> branchNames, Map<String, Long> branchSales) {
 		// 処理内容3-1
-		//BufferedWriterの初期化
+		// BufferedWriterの初期化
 		BufferedWriter bw = null;
 
 		try {
@@ -257,7 +257,7 @@ public class CalculateSales {
 				String branchCode = key;
 				String branchName = branchNames.get(key);
 				Long saleAmount = branchSales.get(key);
-				//値を書き出す
+				// 値を書き出す
 				bw.write(branchCode + "," + branchName + "," + saleAmount);
 				// 改行
 				bw.newLine();
